@@ -54,7 +54,7 @@ class ProfileController extends Controller
 
     }
     public function update(EditProfileRequest $request ,Profile $profile) {
-        $request->validated();
+        // $request->validated();
         $profile->update(array_merge($request->except('phoneNum','emails'),['phoneNum' => json_encode($request->phoneNum),
             'emails' => json_encode($request->emails)]));
         if(isset($request->links)) {

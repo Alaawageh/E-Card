@@ -21,10 +21,11 @@ Route::post('login',[AuthController::class,'login']);
 Route::post('logout',[AuthController::class,'logout']);
 Route::post('register',[AuthController::class,'register']);
 Route::get('/profile/{profile}',[ProfileController::class,'show']);
+
 Route::middleware('auth:sanctum')->group(function() {
-    Route::get('auth/profile/{profile}',[ProfileController::class,'index']);
+    Route::get('/auth/profile/{profile}',[ProfileController::class,'index']);
     Route::post('/profile',[ProfileController::class,'store']);
-    Route::post('profile/{profile}',[ProfileController::class,'update']);
+    Route::post('/edit/profile/{profile}',[ProfileController::class,'update']);
     Route::post('views/{link}',[ProfileController::class,'counter']);
 });
 
