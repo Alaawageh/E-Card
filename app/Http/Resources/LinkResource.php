@@ -17,7 +17,7 @@ class LinkResource extends JsonResource
         return [
             'name_link' => $this->name_link,
             'link' => $this->link,
-            // 'views' => $this->views
+            'views' => $this->when($request->bearerToken(),$this->views),
         ];
     }
 }

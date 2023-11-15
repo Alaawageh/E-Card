@@ -22,10 +22,6 @@ class ProfileController extends Controller
     public function show(Profile $profile) {
         return new ProfileResource($profile->load('links','media'));
     }
-    public function index(Profile $profile) {
-        $userprofile = $profile->load('user','links','media');
-        return new AdminResource($userprofile);
-    }
 
     public function store(ProfileRequest $request) {
         $request->validated();
@@ -54,7 +50,7 @@ class ProfileController extends Controller
 
     }
     public function update(EditProfileRequest $request ,Profile $profile) {
-        // $request->validated();
+        $request->validated();
         $profile->update(array_merge($request->except('phoneNum','emails'),['phoneNum' => json_encode($request->phoneNum),
             'emails' => json_encode($request->emails)]));
         if(isset($request->links)) {
