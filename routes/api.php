@@ -19,12 +19,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login',[AuthController::class,'login']);
 Route::post('logout',[AuthController::class,'logout']);
-Route::post('register',[AuthController::class,'register']);
 Route::get('/profile/{profile}',[ProfileController::class,'show']);
 
 Route::middleware('auth:sanctum')->group(function() {
     Route::post('/profile',[ProfileController::class,'store']);
     Route::post('/edit/profile/{profile}',[ProfileController::class,'update']);
     Route::post('views/{link}',[ProfileController::class,'counter']);
+    Route::post('register',[AuthController::class,'register']);
 });
 
