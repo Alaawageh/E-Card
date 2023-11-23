@@ -26,6 +26,7 @@ return new class extends Migration
             $table->text('bio')->nullable();
             $table->text('about')->nullable();
             $table->text('location')->nullable();
+            $table->bigInteger('views')->nullable();
             $table->timestamps();
         });
     }

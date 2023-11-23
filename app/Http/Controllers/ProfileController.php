@@ -3,24 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EditProfileRequest;
-use App\Http\Requests\LinkRequest;
-use App\Http\Requests\MediaRequest;
 use App\Http\Requests\ProfileRequest;
-use App\Http\Resources\AdminResource;
+use App\Http\Resources\LinkResource;
 use App\Http\Resources\ProfileResource;
-use App\Http\Resources\ShowResource;
 use App\Models\Link;
 use App\Models\Media;
 use App\Models\Profile;
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
     public function show(Profile $profile) {
         return new ProfileResource($profile->load('links','media'));
+    }
+    public function getLinks(Profile $profile) {
+        return new ProfileResource($profile->load('links'));
     }
 
     public function store(ProfileRequest $request) {
@@ -46,7 +43,7 @@ class ProfileController extends Controller
                 ]);
             }
         }
-        return response()->json(['message' => 'Data Saved Succcessfully']);
+        return response()->json(['data' => new ProfileResource($profile) , 'message' => 'Data Saved Succcessfully']);
 
     }
     public function update(EditProfileRequest $request ,Profile $profile) {
@@ -75,19 +72,78 @@ class ProfileController extends Controller
                 );
             }
         }
-        return response()->json(['message' => 'Data Saved Succcessfully']);
+        return response()->json(['data' => new ProfileResource($profile),'message' => 'Data Saved Succcessfully']);
     }
-    public function delete(Profile $profile) {
+    public function destroy(Profile $profile) {
         $profile->delete();
         return response()->json(['message' => 'Successfully Deleted Profile'] ,200);
     }
 
-    public function counter(Link $link) {
+    public function visitLink(Link $link) {
 
         $link->update(['views' => $link->views +1]);
         return $link;
     }
     
+    public function visitProfile(Profile $profile) {
+        $profile->update(['views' => $profile->views +1]);
+        return $profile;
+    }
+    public function getViews_profile(Request $request) {
+        $year = $request->year;
+        $month = $request->month;
+        $day = $request->day;
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
+        $profile = Profile::where('user_id',auth()->user()->id);
 
+        if ($year && $month && $day) {
+            $profile->whereYear('created_at', $year)
+                    ->whereMonth('created_at', $month)
+                    ->whereDay('created_at', $day)->select('views');
+        } elseif ($year && $month) {
+            $profile->whereYear('created_at', $year)
+                  ->whereMonth('created_at', $month)->select('views');
+        } elseif ($year) {
+            $profile->whereYear('created_at', $year)->select('views');
+        } elseif ($day) {
+            $profile->whereDay('created_at', $day)->select('views');
+        } elseif ($startDate && $endDate) {
+            $profile->whereBetween('created_at', [$startDate, $endDate])->select('views');
+        }
+        $data = $profile->first();
+        if (! $data) {
+            return response(['views' => 0]);
+        }
+        return response(['views' => $data->views]);
+    }
+    public function getViews_link(Request $request, Link $link) {
+        $year = $request->year;
+        $month = $request->month;
+        $day = $request->day;
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
+        $query = Link::where('id',$link->id);
+
+        if ($year && $month && $day) {
+            $query->whereYear('created_at', $year)
+                    ->whereMonth('created_at', $month)
+                    ->whereDay('created_at', $day)->select('views');
+        } elseif ($year && $month) {
+            $query->whereYear('created_at', $year)
+                  ->whereMonth('created_at', $month)->select('views');
+        } elseif ($year) {
+            $query->whereYear('created_at', $year)->select('views');
+        } elseif ($day) {
+            $query->whereDay('created_at', $day)->select('views');
+        } elseif ($startDate && $endDate) {
+            $query->whereBetween('created_at', [$startDate, $endDate])->select('views');
+        }
+        $data = $query->first();
+        if (! $data) {
+            return response(['views' => 0]);
+        }
+        return response(['views' => isset($data->views) ? $data->views : 0]);
+    }
     
 }

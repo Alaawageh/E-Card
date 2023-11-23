@@ -28,8 +28,9 @@ class ProfileResource extends JsonResource
             'bio' => $this->bio,
             'about' => $this->about,
             'location' => $this->location,
-            'links' => LinkResource::collection($this->links),
-            'media' => MediaResource::collection($this->media),
+            'views' => isset($this->views) ? $this->views : 0,
+            'links' => LinkResource::collection($this->whenLoaded('links')),
+            'media' => MediaResource::collection($this->whenLoaded('media')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             

@@ -15,9 +15,10 @@ class LinkResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'name_link' => $this->name_link,
             'link' => $this->link,
-            'views' => $this->when($request->bearerToken(),$this->views),
+            'views' => $this->when($request->bearerToken(), isset($this->views) ? $this->views : 0        ),
         ];
     }
 }

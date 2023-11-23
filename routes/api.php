@@ -1,9 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DetailController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,9 +21,16 @@ Route::post('logout',[AuthController::class,'logout']);
 Route::get('/profile/{profile}',[ProfileController::class,'show']);
 
 Route::middleware('auth:sanctum')->group(function() {
-    Route::post('/profile',[ProfileController::class,'store']);
-    Route::post('/edit/profile/{profile}',[ProfileController::class,'update']);
-    Route::post('views/{link}',[ProfileController::class,'counter']);
     Route::post('register',[AuthController::class,'register']);
+
+    Route::resource('/profile',ProfileController::class)->only([
+        'show' , 'store' , 'destroy'
+    ]);
+    Route::post('edit/profile/{profile}',[ProfileController::class,'update']);
+    Route::post('visit/link/{link}',[ProfileController::class,'visitLink']);
+    Route::post('views/link/{link}',[ProfileController::class,'getViews_link']);
+    Route::post('visit/profile/{profile}',[ProfileController::class,'visitProfile']);
+    Route::post('views/profile/{profile}',[ProfileController::class,'getViews_profile']);
+    Route::get('links/profile/{profile}',[ProfileController::class,'getLinks']);
 });
 
