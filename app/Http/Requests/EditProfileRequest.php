@@ -35,6 +35,7 @@ class EditProfileRequest extends FormRequest
             'bio' => 'nullable|string',
             'about' => 'nullable|string',
             'location' => 'nullable|string|max:255',
+            'mode' => 'in:light,dark',
             'links.*.link' => 'nullable|string',
             'links.*.name_link' => 'nullable|string|max:255',
             'media.*.url' => 'nullable|file|mimes:jpeg,jpg,png,pdf,mp4',

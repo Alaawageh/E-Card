@@ -1,5 +1,6 @@
 <?php
 
+use App\Type\ModeType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,16 +18,17 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('nick_name');
-            $table->string('theme');
-            $table->string('color');
-            $table->string('cover');
-            $table->string('photo');
+            $table->string('theme')->nullable();
+            $table->string('color')->nullable();
+            $table->string('cover')->nullable();
+            $table->string('photo')->nullable();
             $table->string('emails')->nullable();
             $table->json('phoneNum')->nullable();
             $table->text('bio')->nullable();
             $table->text('about')->nullable();
             $table->text('location')->nullable();
             $table->bigInteger('views')->nullable();
+            $table->string('mode')->default('light');
             $table->timestamps();
         });
     }
