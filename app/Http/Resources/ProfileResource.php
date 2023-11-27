@@ -30,6 +30,7 @@ class ProfileResource extends JsonResource
             'location' => $this->location,
             'views' => isset($this->views) ? $this->views : 0,
             'mode' => $this->mode,
+            'jobTitle' => $this->jobTitle,
             'links' => LinkResource::collection($this->whenLoaded('links')),
             'media' => MediaResource::collection($this->whenLoaded('media')),
             'created_at' => $this->created_at,

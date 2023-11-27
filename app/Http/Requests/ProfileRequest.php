@@ -37,6 +37,7 @@ class ProfileRequest extends FormRequest
             'about' => 'nullable|string',
             'location' => 'nullable|string|max:255',
             'mode' => 'in:light,dark',
+            'jobTitle' => 'nullable|string|max:255',
             'links.*.link' => 'nullable|string',
             'links.*.name_link' => 'nullable|string|max:255',
             'media.*.url' => 'nullable|file|mimes:jpeg,jpg,png,pdf,mp4',

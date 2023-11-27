@@ -29,6 +29,7 @@ return new class extends Migration
             $table->text('location')->nullable();
             $table->bigInteger('views')->nullable();
             $table->string('mode')->default('light');
+            $table->string('jobTitle')->nullable();
             $table->timestamps();
         });
     }

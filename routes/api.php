@@ -24,7 +24,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('register',[AuthController::class,'register']);
 
     Route::resource('/profile',ProfileController::class)->only([
-        'show' , 'store' , 'destroy'
+       'store' , 'destroy'
     ]);
     Route::post('edit/profile/{profile}',[ProfileController::class,'update']);
     Route::post('visit/link/{link}',[ProfileController::class,'visitLink']);
