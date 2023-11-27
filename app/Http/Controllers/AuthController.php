@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EditLoginRequest;
+use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
@@ -31,15 +33,18 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request) {
 
-        $request->validated($request->all());
-        // if($request->validated()->fails()) {
-        //     return 'error';
-        // }
+        $request->validated();
+        
         $user = User::create(array_merge($request->except('password'),
             ['password' => bcrypt($request->password)]
         ));
     
         return response(['user' => UserResource::make($user)]);
         
+    }
+    public function update(EditUserRequest $request , User $user) {
+        $request->validated();
+        $user->update($request->only('email','password'));
+        return response(['user' => UserResource::make($user)]);
     }
 }

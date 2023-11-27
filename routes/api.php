@@ -22,7 +22,7 @@ Route::get('/profile/{profile}',[ProfileController::class,'show']);
 
 Route::middleware('auth:sanctum')->group(function() {
     Route::post('register',[AuthController::class,'register']);
-
+    Route::patch('edit/user/{user}',[AuthController::class,'update']);
     Route::resource('/profile',ProfileController::class)->only([
        'store' , 'destroy'
     ]);
