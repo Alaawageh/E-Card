@@ -47,4 +47,8 @@ class AuthController extends Controller
         $user->update($request->only('email','password'));
         return response(['user' => UserResource::make($user)]);
     }
+    public function destroy(User $user) {
+        $user->delete();
+        return response()->json(['message' => 'Successfully Deleted'] ,200);
+    }
 }
