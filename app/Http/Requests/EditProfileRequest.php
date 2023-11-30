@@ -22,7 +22,6 @@ class EditProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'exists:users,id',
             'first_name' => 'string|max:255',
             'last_name' => 'string|max:255',
             'nick_name' => 'string|max:255',

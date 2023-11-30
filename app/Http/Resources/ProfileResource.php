@@ -33,6 +33,7 @@ class ProfileResource extends JsonResource
             'jobTitle' => $this->jobTitle,
             'links' => LinkResource::collection($this->whenLoaded('links')),
             'media' => MediaResource::collection($this->whenLoaded('media')),
+            'user' => UserResource::make($this->whenLoaded('user')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             

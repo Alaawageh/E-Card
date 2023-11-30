@@ -9,6 +9,7 @@ use App\Http\Resources\ProfileResource;
 use App\Models\Link;
 use App\Models\Media;
 use App\Models\Profile;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
@@ -16,15 +17,24 @@ class ProfileController extends Controller
     public function show(Profile $profile) {
         return new ProfileResource($profile->load('links','media'));
     }
+    public function myprofile(User $user) {
+        
+        $profile = $user->profile()->first();
+        return  ProfileResource::make($profile->load('links','media'));
+    }
     public function getLinks(Profile $profile) {
         return new ProfileResource($profile->load('links'));
     }
 
     public function store(ProfileRequest $request) {
-        $request->validated();
 
-        $profile = Profile::create(array_merge($request->except('phoneNum','emails'),['phoneNum' => json_encode($request->phoneNum),
-                                    'emails' => json_encode($request->emails)]));
+        $profile = auth()->user()->profile()->create($request->safe()->except('phoneNum','emails'));
+        if(isset($request->phoneNum)) {
+            $profile->phoneNum =  json_encode($request->phoneNum);
+        }       
+        if($request->emails) {
+            $profile->emails = json_encode($request->emails);
+        }                 
         if(isset($request->links)) {
             foreach($request->links as $link) {
                 Link::create([
@@ -47,7 +57,6 @@ class ProfileController extends Controller
 
     }
     public function update(EditProfileRequest $request ,Profile $profile) {
-        $request->validated();
         $profile->update(array_merge($request->except('phoneNum','emails'),['phoneNum' => json_encode($request->phoneNum),
             'emails' => json_encode($request->emails)]));
         if(isset($request->links)) {
