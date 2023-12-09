@@ -23,24 +23,27 @@ class ProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'nick_name' => 'required|string|max:255',
-            'theme' => 'nullable|string',
-            'color' => 'nullable|string',
+            'firstName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
+            'jobTitle' => 'nullable|string|max:255',
+            'businessName' => 'nullable|string|max:255',
+            'location' => 'nullable|string|max:255',
+            'bio' => 'nullable|string',
             'cover' => 'nullable|image|mimes:jpeg,jpg,png',
             'photo' => 'nullable|image|mimes:jpeg,jpg,png',
-            'emails' => 'nullable|unique:profiles,emails',
-            'phoneNum' => 'nullable',
-            'bio' => 'nullable|string',
-            'about' => 'nullable|string',
-            'location' => 'nullable|string|max:255',
-            'mode' => 'in:light,dark',
-            'jobTitle' => 'nullable|string|max:255',
-            'links.*.link' => 'nullable|string',
-            'links.*.name_link' => 'nullable|string|max:255',
-            'media.*.url' => 'nullable|file|mimes:jpeg,jpg,png,pdf,mp4',
-            'media.*.type' => 'nullable|in:image,file,video'
+            'theme_id' => 'nullable|exists:themes,id',
+            'bgColor' => 'nullable|string|max:255',
+            'buttonColor' => 'nullable|string|max:255',
+            'phoneNum' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'primaryLinks.*.id' => 'sometimes|exists:primary_links,id',
+            'primaryLinks.*.value' => 'sometimes|string|max:255',
+            'secondLinks.*.name_link' => 'sometimes|string|max:255',
+            'secondLinks.*.link' => 'sometimes|string|max:255',
+            'secondLinks.*.logo' => 'sometimes|image|max:2048|mimes:jpeg,jpg,png',
+            'sections.*.title' => 'sometimes|string|max:255',
+            'sections.*.name_of_file' => 'sometimes|string',
+            'sections.*.media' => 'sometimes|file|mimes:jpeg,jpg,png,pdf,mp4'
         ];
     }
 

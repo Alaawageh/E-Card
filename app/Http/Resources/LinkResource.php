@@ -19,6 +19,9 @@ class LinkResource extends JsonResource
             'name_link' => $this->name_link,
             'link' => $this->link,
             'views' => $this->when($request->bearerToken(), isset($this->views) ? $this->views : 0        ),
+            'logo' => isset($this->logo) ? url($this->logo) : '',
+            'PrimaryLink' => PrimaryLinkResource::collection($this->whenLoaded('PrimaryLink')),
+            'available' => $this->when($request->bearerToken(), isset($this->available) ? $this->available : 0        ),
         ];
     }
 }

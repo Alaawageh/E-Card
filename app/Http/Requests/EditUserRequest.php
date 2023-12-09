@@ -12,7 +12,7 @@ class EditUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->route('user')->id == auth()->user()->id;
     }
 
     /**

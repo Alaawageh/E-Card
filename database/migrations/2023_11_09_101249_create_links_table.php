@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('name_link')->nullable();
             $table->string('link')->nullable();
             $table->bigInteger('views')->nullable();
+            $table->string('logo')->nullable();
+            $table->boolean('available')->default(true);
             $table->timestamps();
         });
     }

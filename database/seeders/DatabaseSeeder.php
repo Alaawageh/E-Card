@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@gmail.com',
             'password' => Hash::make('123456789'),
             'uuid' => Str::uuid(),
+            'is_admin' => true
         ]);
     }
 }

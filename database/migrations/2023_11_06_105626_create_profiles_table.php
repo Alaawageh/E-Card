@@ -15,21 +15,20 @@ return new class extends Migration
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('nick_name');
-            $table->string('theme')->nullable();
-            $table->string('color')->nullable();
+            $table->foreignId('theme_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->string('firstName');
+            $table->string('lastName');
+            $table->string('jobTitle')->nullable();
+            $table->string('businessName')->nullable();
+            $table->text('location')->nullable();
+            $table->text('bio')->nullable();
             $table->string('cover')->nullable();
             $table->string('photo')->nullable();
-            $table->string('emails')->nullable();
-            $table->json('phoneNum')->nullable();
-            $table->text('bio')->nullable();
-            $table->text('about')->nullable();
-            $table->text('location')->nullable();
+            $table->string('bgColor')->nullable();
+            $table->string('buttonColor')->nullable();
+            $table->string('phoneNum')->nullable();
+            $table->string('email')->nullable();
             $table->bigInteger('views')->nullable();
-            $table->string('mode')->default('light');
-            $table->string('jobTitle')->nullable();
             $table->timestamps();
         });
     }
