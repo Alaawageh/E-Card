@@ -7,23 +7,26 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function login(LoginRequest $request) {
-        $request->validated();
-        if (! Auth::attempt($request->only(['userName','email','password']))) {
-            return response( ['message' => 'Incorrect email or password'] , 422);
+    public function login(LoginRequest $request)
+    {
+        $user = User::where('username', $request->username)->orWhere('email', $request->username)->first();
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response([
+               'msg' => 'Invalid username or password'
+            ], 401);
         }
-        
-        $user = User::where('email', $request->email)->orWhere('userName', $request->userName)->first();
-        $auth = auth()->user();
-        return response([
-            'token' => $user->createToken("TOKEN")->plainTextToken,
-            'user' => UserResource::make($auth)
-        ],200);
-    }
+        $token = $user->createToken('apiToken')->plainTextToken;
+        $res = [
+            'user' => new UserResource($user),
+            'token' => $token
+        ];
 
+        return response($res, 201);
+    }
     public function logout(Request $request) {
         Auth::logout();
         return response()->json(['message' => 'Successfully logged out'] ,200);

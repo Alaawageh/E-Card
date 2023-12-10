@@ -16,11 +16,11 @@ class UserResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'userName' => $this->userName,
-            'email' => isset($this->email) ? $this->email : " ",
+            'username' => $this->userName,
+            'email' => isset($this->email) ? $this->email : null,
             'uuid' => $this->uuid,
             // 'is_admin' => isset($this->is_admin) ? $this->is_admin == true : false,
-            'profile' =>  ProfileResource::make($this->whenLoaded('profile'))
+            'profile' => isset( $this->profile->id) ? $this->profile->id : null
         ];
     }
 }

@@ -1,30 +1,20 @@
 <?php
+  namespace App\Http\Requests;
+  use Illuminate\Foundation\Http\FormRequest;
+  use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 
-namespace App\Http\Requests;
+  class LoginRequest extends FormRequest
+  {
+      public function authorize()
+      {
+          return true;
+      }
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class LoginRequest extends FormRequest
-{
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
-    public function rules(): array
-    {
-        return [
-            'userName' => 'sometimes|string',
-            'email' => 'sometimes|email',
-            'password' => 'required|min:6|max:24|string',
-        ];
-    }
-}
+      public function rules()
+      {
+          return [
+              'username' => 'required',
+              'password' => 'required'
+          ];
+      }
+  }

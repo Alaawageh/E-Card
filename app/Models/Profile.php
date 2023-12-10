@@ -28,7 +28,7 @@ class Profile extends Model
     }
     public function primary()
     {
-        return $this->belongsToMany(PrimaryLink::class,'profile_primary_links')->withPivot('value','views');
+        return $this->belongsToMany(PrimaryLink::class,'profile_primary_links')->withPivot('value','views','available');
     }
     public function sections():HasMany
     {

@@ -14,6 +14,7 @@ use App\Models\Profile;
 use App\Models\ProfilePrimaryLink;
 use App\Models\Section;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class ProfileController extends Controller
 {
@@ -64,36 +65,43 @@ class ProfileController extends Controller
 
     }
     public function update(EditProfileRequest $request ,Profile $profile) {
-        abort_if($profile->user_id != auth()->user()->id , 403 ,'unauthorized');
+        // abort_if($profile->user_id != auth()->user()->id , 403 ,'unauthorized');
         $profile->update($request->safe()->except('primaryLinks','secondLinks','sections'));
+
         if (isset($request->primaryLinks)) {
+            $profile->primary()->detach();
             foreach($request->primaryLinks as $primaryLink) {
-               ProfilePrimaryLink::updateOrCreate(['id' => $primaryLink['id']],[
-                'profile_id' => $profile->id,
-                'primary_link_id' => $primaryLink['id'],
-                'value' => $primaryLink['value'] ,
-               ]);
-            }
-        }
-        if (isset($request->secondLinks)) {
-            foreach($request->secondLinks as $link) {
-                Link::updateOrCreate(['id' => $link['id']],[
-                    'profile_id' => $profile->id,
-                    'name_link' => $link['name_link'],
-                    'link' => $link['link'],
-                    'logo' => $link['logo']
+                $profile->primary()->attach($primaryLink['id'], [
+                    'value' => $primaryLink['value']
                 ]);
             }
+            
+            
+        }
+        if (isset($request->secondLinks)) {
+           $profile->links()->delete();
+           foreach($request->secondLinks as $link) {
+            Link::create([
+                'profile_id' => $profile->id,
+                'name_link' => $link['name_link'],
+                'link' => $link['link'],
+                'logo' => $link['logo']
+            ]);
+           } 
+            
         }
         if (isset($request->sections)) {
+            $profile->sections()->delete();
             foreach($request->sections as $section) {
-                Section::updateOrCreate(['id' => $section['id']],[
+                Section::create([
                     'profile_id' => $profile->id,
                     'title' => $section['title'],
                     'name_of_file' => $section['name_of_file'],
                     'media' => $section['media']
                 ]);
             }
+            
+            
         }
 
         return response()->json(['data' => new ProfileResource($profile),'message' => 'Data Saved Succcessfully']);
@@ -150,6 +158,7 @@ class ProfileController extends Controller
         abort_if($profile->user_id != auth()->user()->id , 403 ,'unauthorized');
        return new ShowLinksResource($profile->load(['links','primary']));
     }
+
 
     
 }

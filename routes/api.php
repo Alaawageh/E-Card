@@ -31,11 +31,13 @@ Route::post('login',[AuthController::class,'login']);
 Route::post('logout',[AuthController::class,'logout']);
 
 Route::middleware('auth:sanctum')->group(function() {
-
+   
     Route::middleware('isAdmin')->group(function() {
         Route::resource('user',UserController::class)->only('index','store','destroy');
-        Route::patch('user/{user}',[UserController::class,'update'])->withoutMiddleware('isAdmin');
+        Route::patch('user/{user}',[UserController::class,'update']);
+        // Route::post('generate_code',[UserController::class,'generate_code'])->withoutMiddleware('isAdmin');
         Route::get('/user/{user:uuid}',[UserController::class,'show'])->withoutMiddleware(['isAdmin']);
+        Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class,'verifyEmail'])->name('verification.verify');
 
         Route::get('theme',[ThemeController::class,'index'])->withoutMiddleware(['isAdmin']);
         Route::get('theme/{theme}',[ThemeController::class,'show'])->withoutMiddleware(['isAdmin']);
@@ -78,7 +80,7 @@ Route::middleware('auth:sanctum')->group(function() {
     });
 
     //verify email
-    Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class,'verifyEmail'])->name('verification.verify');
+    // Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class,'verifyEmail'])->name('verification.verify');
 
     //forget & reset password
     Route::post('forgotPassword',[NewPasswordController::class,'forgotPassword'])->name('password.email');
